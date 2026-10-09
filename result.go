@@ -3,7 +3,6 @@ package mo
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 )
 
 // Ok builds a Result when value is valid.
@@ -22,13 +21,6 @@ func Err[T any](err error) Result[T] {
 		err:   err,
 		isErr: true,
 	}
-}
-
-// Errf builds a Result when value is invalid.
-// Errf formats according to a format specifier and returns the error as a value that satisfies Result[T].
-// Play: https://go.dev/play/p/N43w92SM-Bs
-func Errf[T any](format string, a ...any) Result[T] {
-	return Err[T](fmt.Errorf(format, a...))
 }
 
 // TupleToResult convert a pair of T and error into a Result.

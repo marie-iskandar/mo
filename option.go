@@ -161,12 +161,12 @@ func (o Option[T]) Match(onValue func(value T) (T, bool), onNone func() (T, bool
 
 // Map executes the mapper function if value is present or returns None if absent.
 // Play: https://go.dev/play/p/mvfP3pcP_eJ
-func (o Option[T]) Map(mapper func(value T) (T, bool)) Option[T] {
+func (o Option[T]) Map[U any](mapper func(value T) (U, bool)) Option[U] {
 	if o.isPresent {
 		return TupleToOption(mapper(o.value))
 	}
 
-	return None[T]()
+	return None[U]()
 }
 
 // MapNone executes the mapper function if value is absent or returns Option.
@@ -181,21 +181,21 @@ func (o Option[T]) MapNone(mapper func() (T, bool)) Option[T] {
 
 // FlatMap executes the mapper function if value is present or returns None if absent.
 // Play: https://go.dev/play/p/OXO-zJx6n5r
-func (o Option[T]) FlatMap(mapper func(value T) Option[T]) Option[T] {
+func (o Option[T]) FlatMap[U any](mapper func(value T) Option[U]) Option[U] {
 	if o.isPresent {
 		return mapper(o.value)
 	}
 
-	return None[T]()
+	return None[U]()
 }
 
 // MapValue executes the mapper function if value is present or returns None if absent.
-func (o Option[T]) MapValue(mapper func(value T) T) Option[T] {
+func (o Option[T]) MapValue[U any](mapper func(value T) U) Option[U] {
 	if o.isPresent {
 		return Some(mapper(o.value))
 	}
 
-	return None[T]()
+	return None[U]()
 }
 
 // ToPointer returns value if present or a nil pointer.

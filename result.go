@@ -131,21 +131,21 @@ func (r Result[T]) Match(onSuccess func(value T) (T, error), onError func(err er
 
 // Map executes the mapper function if Result is valid. It returns a new Result.
 // Play: https://go.dev/play/p/-ndpN_b_OSc
-func (r Result[T]) Map(mapper func(value T) (T, error)) Result[T] {
+func (r Result[T]) Map[U any](mapper func(value T) (U, error)) Result[U] {
 	if !r.isErr {
 		return TupleToResult(mapper(r.value))
 	}
 
-	return Err[T](r.err)
+	return Err[U](r.err)
 }
 
 // MapValue executes the mapper function if Result is valid. It returns a new Result.
-func (r Result[T]) MapValue(mapper func(value T) T) Result[T] {
+func (r Result[T]) MapValue[U any](mapper func(value T) U) Result[U] {
 	if !r.isErr {
 		return TupleToResult(mapper(r.value), nil)
 	}
 
-	return Err[T](r.err)
+	return Err[U](r.err)
 }
 
 // MapErr executes the mapper function if Result is invalid. It returns a new Result.
@@ -160,12 +160,12 @@ func (r Result[T]) MapErr(mapper func(error) (T, error)) Result[T] {
 
 // FlatMap executes the mapper function if Result is valid. It returns a new Result.
 // Play: https://go.dev/play/p/Ud5QjZOqg-7
-func (r Result[T]) FlatMap(mapper func(value T) Result[T]) Result[T] {
+func (r Result[T]) FlatMap[U any](mapper func(value T) Result[U]) Result[U] {
 	if !r.isErr {
 		return mapper(r.value)
 	}
 
-	return Err[T](r.err)
+	return Err[U](r.err)
 }
 
 // MarshalJSON encodes Result into json, following the JSON-RPC specification for results,
